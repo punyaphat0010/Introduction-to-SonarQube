@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                git 'https://github.com/aeff60/simple-express-app.git'
+                git 'https://github.com/punyaphat0010/Introduction-to-SonarQube'
                 bat "npm install"
             }
         }
