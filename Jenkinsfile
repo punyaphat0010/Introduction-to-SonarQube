@@ -1,25 +1,38 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs24.7.0'
+    environment {
+        SONARQUBE = credentials('sonar-token') // ชื่อ Credential ของ Jenkins
     }
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/punyaphat0010/Introduction-to-SonarQube.git'
-                sh "npm install"
+                git branch: 'main', url: 'https://github.com/punyaphat0010/Introduction-to-SonarQube.git'
             }
         }
 
-        // stage('Scan') {
-        //     steps {
-        //         withSonarQubeEnv(installationName: 'sq1') {
-        //             bat "npm install sonar-scanner"
-        //             bat 'npx sonar-scanner -X -X -Dsonar.projectKey=mywebapp'
-        //         }
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'npx sonar-scanner -Dsonar.projectKey=mywebapp'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
     }
 }
+
