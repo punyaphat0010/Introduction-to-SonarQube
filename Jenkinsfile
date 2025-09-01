@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "nodejs24.7.0",
+        nodejs "nodejs24.7.0"
         jdk 'jdk17'
     }
     environment {
