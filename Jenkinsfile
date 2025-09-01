@@ -5,13 +5,11 @@ pipeline {
         nodejs "nodejs24.7.0"
         jdk 'jdk17'
     }
+
     environment {
         JAVA_HOME = "${tool 'jdk17'}"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
-    }
-
-    environment {
-        SONARQUBE = credentials('SonarQube') // ชื่อ Credential ของ Jenkins
+        SONARQUBE = credentials('SonarQube')
     }
 
     stages {
